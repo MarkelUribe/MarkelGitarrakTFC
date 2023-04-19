@@ -43,12 +43,11 @@
             @if($user['argazkia']==null)
             <p>Ez daukazu zure perfileko argazkirik igota</p>
             @else
-            <img width="150px" src="{{ asset('storage/' . $user['argazkia']) }}" alt="Profile Picture">
-
+            <img width="150px" src="{{ asset('storage/'. $user->argazkia) }}" alt="Profile Picture">
             @endif
             <form method="POST" action="/erabiltzaileimgaldatu" enctype="multipart/form-data">
                 @csrf
-                <input required type="file" name="file">
+                <input required type="file" name="file" accept="image/*">
                 <button type="submit">Igo argazkia</button>
             </form>
             @if(session()->has('message'))

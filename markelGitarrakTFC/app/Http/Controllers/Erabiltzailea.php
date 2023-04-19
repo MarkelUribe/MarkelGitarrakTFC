@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class Erabiltzailea extends Controller
 {
@@ -21,20 +22,25 @@ class Erabiltzailea extends Controller
 
     public function argAldatu(Request $request)
     {
-        $path = $request->file('file')->store('profilepics');
+        //store file
+        $path = $request->file('file')->store('public/profilepics');
 
+        //remove previous ppic if exists
+        if(Storage::exists('public/'.session('img'))) {
+            Storage::delete('public/'.session('img'));
+        }
 
+        //change path for storage, remove public/ so it displays in the view
+        $path = str_replace('public/', '', $path);
 
-        
+        //find user and store path
         $user = User::where('email', session('email'))->first();
         $user->argazkia = $path;
         $user->updated_at = now();
         $user->save();
 
-        //$user->update([
-        //    'argazkia' => $path,
-        //    'updated_at' => now()
-        //]);
+        //store path in session
+        $request->session()->put('img', $path);
 
         return redirect()->back()->with('message', 'Argazkia arrakastaz igo da!');
     }

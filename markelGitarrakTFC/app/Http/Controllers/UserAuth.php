@@ -21,7 +21,7 @@ class UserAuth extends Controller
             $user = User::where('email',$req['email']) -> first();
             $req->session()->put('user', $user['name']);
             $req->session()->put('email', $user['email']);
-            $req->session()->put('img', $user['argazkiak']);
+            $req->session()->put('img', $user['argazkia']);
             echo session('user');
             return redirect()->intended('');
         }
