@@ -13,49 +13,68 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
 
-    
 
     <!-- Styles -->
     <style>
-        .carousel {
+        #content {
             width: 70%;
-            height: 3rem;
             margin: auto;
         }
+
         .fade:not(.show) {
-            opacity: 1; 
+            opacity: 1;
         }
-        .slideshow-container{
-            width: 90%;
+
+        .slideshow-container {
+
             padding: 15px;
             border-radius: 10px;
             margin: auto;
             background-color: #b1b1b1;
         }
 
-        .slideshow-container img{
+        .slideshow-container img {
             max-height: 300px;
+            max-width: 100%;
             width: auto !important;
         }
-        .mySlides{
+
+        .mySlides {
             text-align: center;
         }
-        .next{
+
+        .next {
             text-decoration: none;
         }
-        .prev{
+
+        .prev {
             text-decoration: none;
         }
-        
     </style>
     <link rel="stylesheet" href="{{ URL::asset('css/carousel.css') }}" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#btn_ezabatu").click(function() {
+                let text = "Zure eskaintza ezabatzea nahi duzu?\nDatu eta argazki denak ezabatuko dira.";
+                if (confirm(text) == true) {
+                    window.location.href="{{ url('eskaintzaezabatu') }}/{{$eskaintza->id}}";
+                }
+            });
+        });
+    </script>
 </head>
 
 <body class="antialiased">
     @include('navbar')
 
     <div id="content">
-        
+        @if( session('user') !== null)
+        @if( $user->id === $eskaintza->userId)
+        <a href="{{ url('eskaintzaaldatu') }}/{{$eskaintza->id}}">✎</a>
+        <button id="btn_ezabatu">Ezabatu</button>
+        @endif
+        @endif
         <div class="slideshow-container">
             <?php
             $img_arr = array_filter(explode(",", $eskaintza->argazkiak), fn ($value) => !is_null($value));
@@ -82,18 +101,20 @@
         <br>
 
         <div style="text-align:center">
-        <?php
+            <?php
             foreach ($img_arr as $key => $value) {
             ?>
-            <span class="dot" onclick="currentSlide(<?php echo $key+1; ?>)"></span>
-                
+                <span class="dot" onclick="currentSlide(<?php echo $key + 1; ?>)"></span>
+
             <?php
             }
             ?>
         </div>
-            <h3>{{$eskaintza->prezioa}}€</h3>
-            <h4>{{$eskaintza->izena}}</h4>
-            <p>{{$eskaintza->izena}}</p>
+        <h3>{{$eskaintza->prezioa}}€</h3>
+        <h4>{{$eskaintza->izena}}</h4>
+        <i>{{$eskaintza->estatua}}</i><br>
+        <i>{{$mota->mota}}</i>
+        <h6>{{$eskaintza->azalpena}}</h6>
     </div>
 
     <script>

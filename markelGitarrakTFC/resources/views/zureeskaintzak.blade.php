@@ -17,6 +17,7 @@
     <style>
         #eskaintzak {
             display: flex;
+            flex-wrap: wrap;
         }
 
         .eskaintzabox {

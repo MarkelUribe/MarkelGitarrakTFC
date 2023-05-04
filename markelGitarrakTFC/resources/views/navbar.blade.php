@@ -19,7 +19,7 @@
                     <a class="nav-link mx-2 <?php if(basename($_SERVER["PHP_SELF"])=='index.php'){ ?> active <?php } ?> " aria-current="page" href="{{ url('') }}">Hasiera</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link mx-2 <?php if(basename($_SERVER["PHP_SELF"])=='eskaintzak'){ ?> active <?php } ?> " href="#">Eskaintzak</a>
+                    <a class="nav-link mx-2 <?php if(basename($_SERVER["PHP_SELF"])=='eskaintzak'){ ?> active <?php } ?> " href="{{ url('bilatu') }}">Eskaintzak</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link mx-2 <?php if(basename($_SERVER["PHP_SELF"])=='zureeskaintzak'){ ?> active <?php } ?> " href="{{ url('zureeskaintzak') }}">Zure Eskaintzak</a>

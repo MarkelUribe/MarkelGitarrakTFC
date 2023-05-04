@@ -10,6 +10,7 @@
         "vite": "^4.0.0"
     },
     "dependencies": {
+        "@geoapify/geocoder-autocomplete": "^1.5.1",
         "jquery": "^3.6.4"
     }
 }

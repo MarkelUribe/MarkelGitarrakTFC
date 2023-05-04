@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BilaketakController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserAuth;
 use App\Http\Controllers\Erabiltzailea;
@@ -42,11 +43,21 @@ Route::get('/logout', function(){
     return redirect('login');
 });
 
+Route::get('bilatu', [BilaketakController::class, 'bilatuIndex']);
+Route::post("eskaintzakfiltratu",[BilaketakController::class, 'eskaintzakfiltratu']);
+
 Route::get('eskaintza/{id}', [EskaintzaController::class, 'eskaintzaerakutsi']);
+Route::get('eskaintzaaldatu/{id}', [EskaintzaController::class, 'eskaintzaaldatu']);
+Route::get('eskaintzaezabatu/{id}', [EskaintzaController::class, 'eskaintzaezabatu']);
+Route::post("submiteskaintzaaldatu",[EskaintzaController::class, 'submiteskaintzaaldatu']);
 
 Route::get("zureeskaintzak",[EskaintzaController::class, 'zureeskaintzak']);
 Route::get("eskaintzaberria",[EskaintzaController::class, 'eskaintzaberria']);
 Route::post("sortueskaintza",[EskaintzaController::class, 'sortueskaintza']);
 Route::post('argazkiagehitu',[EskaintzaController::class, 'argazkiagehitu']);
 Route::post('argazkiakendu',[EskaintzaController::class, 'argazkiakendu']);
+Route::post('argazkiagehitualdaketan',[EskaintzaController::class, 'argazkiagehitualdaketan']);
+Route::post('argazkiakendualdaketan',[EskaintzaController::class, 'argazkiakendualdaketan']);
+Route::post('showeskaintzaaldatuimg',[EskaintzaController::class, 'showeskaintzaaldatuimg']);
+
 
