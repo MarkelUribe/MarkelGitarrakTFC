@@ -15,85 +15,156 @@
     <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
 
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/96/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/loaders/MTLLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/loaders/OBJLoader.js"></script>
+</head>
 
-    <!-- Styles -->
-    <style>
-        #eskaintzak {
-            display: flex;
-            flex-wrap: wrap;
-        }
 
+<!-- Styles -->
+<style>
+    #eskaintzak {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .eskaintzabox img {
+        width: 100%;
+        border-radius: 10px;
+    }
+
+    .eskaintzabox {
+        border-radius: 10px;
+        margin: 10px;
+        height: 350px;
+    }
+
+    @media (max-width: 600px) {
         .eskaintzabox {
-            border-radius: 10px;
-            margin: 10px;
-            width: 200px;
-            height: 350px;
+            width: 44vw !important;
         }
+    }
 
-        .eskaintzabox img {
-            width: 100%;
-            border-radius: 10px;
+    @media (min-width: 601px) {
+        .eskaintzabox {
+            width: 200px;
         }
-    </style>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $.ajaxSetup({
+    }
+
+    canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: -1;
+        overflow: hidden;
+    }
+</style>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        filtratu();
+
+        function filtratu() {
+            let bilaketa = $('#input_bilaketa').val();
+            let mota = $('#input_mota').val();
+            $.ajax({
+                type: 'POST',
+                url: '/eskaintzakfiltratu',
+                data: {
+                    'bilaketa': bilaketa,
+                    'mota': mota,
+                },
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(data) {
+                    $("#eskaintzak").html(data.eskaintzak);
+                },
+                error: function(xhr, status, error) {
+                    console.log(xhr.responseText);
                 }
             });
+        }
 
+        $("#input_bilaketa").on('change', function() {
             filtratu();
-
-            function filtratu() {
-                let bilaketa = $('#input_bilaketa').val();
-                let mota = $('#input_mota').val();
-                $.ajax({
-                    type: 'POST',
-                    url: '/eskaintzakfiltratu',
-                    data: {
-                        'bilaketa': bilaketa,
-                        'mota': mota,
-                    },
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    success: function(data) {
-                        $("#eskaintzak").html(data.eskaintzak);
-                    },
-                    error: function(xhr, status, error) {
-                        console.log(xhr.responseText);
-                    }
-                });
-            }
-
-            $("#input_bilaketa").on('change', function() {
-                filtratu();
-            });
-            $("#input_mota").on('change', function() {
-                filtratu();
-            });
         });
-    </script>
+        $("#input_mota").on('change', function() {
+            filtratu();
+        });
+    });
+</script>
 
 <body class="antialiased">
     @include('navbar')
     <div id="content">
+        @if( session('user') !== null)
+        <h3>Kaixo {{ session('user') }}</h3>
+        @endif
         <input type="text" id="input_bilaketa" placeholder="Bilatu..." name="search">
         <div>
             <label>Kategoriak filtratu</label><br>
-        <select id="input_mota">
-        <option value="" selected></option>
-        @foreach ($eskaintzamotak as $m)
-            <option value="{{$m->id}}">{{$m->mota}}</option>
-        @endforeach
-        </select>
+            <select id="input_mota">
+                <option value="" selected></option>
+                @foreach ($eskaintzamotak as $m)
+                <option value="{{$m->id}}">{{$m->mota}}</option>
+                @endforeach
+            </select>
         </div>
-        
-        <div id="eskaintzak"></div>
 
+        <div id="eskaintzak"></div>
+        <canvas></canvas>
     </div>
+
+    <script>
+        //{{ asset("storage/3d/Guitar.obj" ) }}
+        var camera, scene, renderer, stats, windowHalfX = window.innerWidth / 2,
+        windowHalfY = window.innerHeight / 2,
+        mouseX = 0,
+        mouseY = 0;
+
+    init();
+    animate();
+
+    function init() {
+        camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 2000);
+        camera.position.set(30, 30, 30)
+        scene = new THREE.Scene();
+
+        scene.add(new THREE.Mesh(
+            new THREE.BoxGeometry(5, 5, 5),
+            new THREE.MeshBasicMaterial({ color: 0x00ff00 })
+        ));
+
+        renderer = new THREE.WebGLRenderer({ antialias: true, canvas: document.querySelector('canvas'), alpha: true });
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        window.addEventListener('mousemove', onDocumentMouseMove, false);
+    }
+
+    function onDocumentMouseMove(event) {
+        mouseX = (event.clientX - windowHalfX) / 10;
+        mouseY = (event.clientY - windowHalfY) / 10;
+    }
+
+    function animate() {
+        requestAnimationFrame(animate);
+        render();
+    }
+
+    function render() {
+        camera.position.x += (mouseX - camera.position.x) * .05;
+        camera.position.y += (-mouseY - camera.position.y) * .05;
+        camera.lookAt(scene.position);
+        renderer.render(scene, camera);
+    }
+    </script>
 </body>
 
 </html>

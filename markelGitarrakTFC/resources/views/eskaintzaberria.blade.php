@@ -189,7 +189,7 @@
             </select>
 
             <label>Azalpena</label>
-            <input required type="textarea" name="azalpena">
+            <input required type="textarea" name="azalpena" maxlength="450">
 
             <label>Prezioa</label>
             <input required type="number" name="prezioa">

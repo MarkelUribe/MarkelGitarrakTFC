@@ -15,8 +15,12 @@ class Erabiltzailea extends Controller
         }
 
         $user = User::where('email', session('email'))->first();
+
+        $latlon = app('App\Http\Controllers\EskaintzaController')->kokapenaHelbidetikJaso($user->kokapena);
+
         return view('erabiltzailea', [
             'user' => $user,
+            'latlon' => $latlon,
         ]);
     }
 
@@ -26,8 +30,8 @@ class Erabiltzailea extends Controller
         $path = $request->file('file')->store('public/profilepics');
 
         //remove previous ppic if exists
-        if(Storage::exists('public/'.session('img'))) {
-            Storage::delete('public/'.session('img'));
+        if (Storage::exists('public/' . session('img'))) {
+            Storage::delete('public/' . session('img'));
         }
 
         //change path for storage, remove public/ so it displays in the view
@@ -43,5 +47,17 @@ class Erabiltzailea extends Controller
         $request->session()->put('img', $path);
 
         return redirect()->back()->with('message', 'Argazkia arrakastaz igo da!');
+    }
+
+    public function erabiltzailekokapenaaldatu(Request $request)
+    {
+        $user = User::where('email', session('email'))->first();
+
+        $user->kokapena = $request->address;
+        $user->updated_at = now();
+        $user->save();
+
+        return response()->json(array('address' => $request->address));
+
     }
 }

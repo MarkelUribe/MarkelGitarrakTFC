@@ -9,17 +9,59 @@
     <title>Markel Gitarrak</title>
     <link rel="shortcut icon" href="{{ asset('storage/icon/logo.png') }}">
 
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
 
 
+    <!-- Map stuff -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js" integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
+
     <!-- Styles -->
     <style>
+        #map {
+            height: 280px;
+            margin: 15px;
+        }
+
         #content {
             width: 70%;
             margin: auto;
         }
+
+        #eskaintzajabeaimg {
+            width: 40px;
+            height: 40px;
+            border-radius: 30px;
+        }
+
+        #likeetaerosi {
+            display: flex;
+        }
+
+        #btn_erosi {
+            margin: 10px;
+            font-size: large;
+            font-weight: bold;
+            width: 30%;
+            border-radius: 15px;
+        }
+
+        #btn_like {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        #btn_like img {
+            width: 30px;
+        }
+
 
         .fade:not(.show) {
             opacity: 1;
@@ -55,11 +97,37 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
             $("#btn_ezabatu").click(function() {
                 let text = "Zure eskaintza ezabatzea nahi duzu?\nDatu eta argazki denak ezabatuko dira.";
                 if (confirm(text) == true) {
-                    window.location.href="{{ url('eskaintzaezabatu') }}/{{$eskaintza->id}}";
+                    window.location.href = "{{ url('eskaintzaezabatu') }}/{{$eskaintza->id}}";
                 }
+            });
+
+            $('#btn_like').click(function() {
+                $.ajax({
+                    type: 'POST',
+                    url: '/likeorunlike',
+                    data: {
+                        'eskaintzaId': '{{$eskaintza->id}}',
+                    },
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(data) {
+                        $('#img_like').attr("src",data.img);
+                    },
+                    error: function(xhr, status, error) {
+                        console.log(xhr.responseText);
+                        console.log(error);
+                    }
+                });
             });
         });
     </script>
@@ -73,6 +141,10 @@
         @if( $user->id === $eskaintza->userId)
         <a href="{{ url('eskaintzaaldatu') }}/{{$eskaintza->id}}">✎</a>
         <button id="btn_ezabatu">Ezabatu</button>
+        @else
+        <i>Saltzailea</i><br>
+        <img id="eskaintzajabeaimg" src="{{ asset('storage/'. $eskaintzajabea->argazkia ) }}">
+        <label>{{$eskaintzajabea->name}}</label>
         @endif
         @endif
         <div class="slideshow-container">
@@ -110,11 +182,37 @@
             }
             ?>
         </div>
-        <h3>{{$eskaintza->prezioa}}€</h3>
-        <h4>{{$eskaintza->izena}}</h4>
+        <h2><b>{{$eskaintza->prezioa}}€</b></h2>
+        <h3>{{$eskaintza->izena}}</h3>
+
+        @if( $user->id != $eskaintza->userId)
+        <div id="likeetaerosi">
+            <a id="btn_like"><img id="img_like" src="{{$likeimg}}"></a>
+            <button id="btn_erosi">EROSI</button><br>
+        </div>
+
+        @endif
+
         <i>{{$eskaintza->estatua}}</i><br>
-        <i>{{$mota->mota}}</i>
-        <h6>{{$eskaintza->azalpena}}</h6>
+        <i>{{$mota->mota}}</i><br><br>
+        <p>{{$eskaintza->azalpena}}</p>
+        <label>Kokapena</label>
+        @if( session('user') !== null)
+        @if( $user->id === $eskaintza->userId)
+        <br><i>{{$eskaintza->kokapena}}</i>
+        @endif
+        @endif
+        @if($latlon == [0,0])
+        <p>Kokapen hau ezin da mapan erakutsi</p>
+        @else
+        <p>Zure kokapenetik {{$distantzia}}-tara dago</p>
+        @endif
+
+        <div id="map"></div><br>
+
+
+
+
     </div>
 
     <script>
@@ -148,6 +246,31 @@
             slides[slideIndex - 1].style.display = "block";
             dots[slideIndex - 1].className += " active";
         }
+
+
+        var tileLayer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+            attribution: false
+        });
+
+        var map = L.map('map', {
+                zoomControl: true,
+                layers: [tileLayer],
+                maxZoom: 18,
+                minZoom: 6
+            })
+            .setView([<?php echo $latlon[0] ?>, <?php echo $latlon[1] ?>], 15);
+
+        var circle = L.circle([<?php echo $latlon[0] ?>, <?php echo $latlon[1] ?>], {
+            color: 'red',
+            fillColor: '#f03',
+            fillOpacity: 0.5,
+            radius: 350
+        }).addTo(map);
+
+
+        setTimeout(function() {
+            map.invalidateSize()
+        }, 800);
     </script>
 
 </body>

@@ -19,7 +19,7 @@ use App\Http\Controllers\EskaintzaController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('bilatu');
 });
 
 Route::post("userlogin",[UserAuth::class, 'userLogin']);
@@ -27,6 +27,7 @@ Route::post("userRegister",[UserAuth::class, 'userRegister']);
 
 Route::get("erabiltzailea",[Erabiltzailea::class, 'index']);
 Route::post("erabiltzaileimgaldatu",[Erabiltzailea::class, 'argAldatu']);
+Route::post('erabiltzailekokapenaaldatu',[Erabiltzailea::class, 'erabiltzailekokapenaaldatu']);
 
 Route::view("login", 'login');
 Route::view("register", 'register');
@@ -39,6 +40,14 @@ Route::get('/login', function(){
 Route::get('/logout', function(){
     if(session()->has('user')){
         session()->flush();
+    }
+    return redirect('login');
+});
+
+Route::get('/likes', function () {
+    if (session()->has('user')) {
+        $eskaintzaController = new EskaintzaController();
+        return $eskaintzaController->likeakerakutsi();
     }
     return redirect('login');
 });
@@ -59,5 +68,8 @@ Route::post('argazkiakendu',[EskaintzaController::class, 'argazkiakendu']);
 Route::post('argazkiagehitualdaketan',[EskaintzaController::class, 'argazkiagehitualdaketan']);
 Route::post('argazkiakendualdaketan',[EskaintzaController::class, 'argazkiakendualdaketan']);
 Route::post('showeskaintzaaldatuimg',[EskaintzaController::class, 'showeskaintzaaldatuimg']);
+
+Route::post('likeorunlike',[EskaintzaController::class, 'likeorunlike']);
+
 
 
