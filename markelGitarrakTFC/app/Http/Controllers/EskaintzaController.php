@@ -26,7 +26,8 @@ class EskaintzaController extends Controller
 
         $user = User::where('email', session('email'))->first();
 
-        $eskaintzak = Eskaintza::where([['erosleId','==', Null],['userId', $user['id']]])->get();
+        $eskaintzak = Eskaintza::where([['userId', $user['id']]])->get();
+        $eskaintzak = $eskaintzak->where('erosleId', '==', Null);
 
         return view("zureeskaintzak", compact('eskaintzak'));
     }
