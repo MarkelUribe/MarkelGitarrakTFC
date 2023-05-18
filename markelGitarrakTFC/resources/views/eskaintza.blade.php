@@ -47,7 +47,7 @@
             margin: 10px;
             font-size: large;
             font-weight: bold;
-            width: 30%;
+            width: 120%;
             border-radius: 15px;
         }
 
@@ -121,7 +121,7 @@
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     success: function(data) {
-                        $('#img_like').attr("src",data.img);
+                        $('#img_like').attr("src", data.img);
                     },
                     error: function(xhr, status, error) {
                         console.log(xhr.responseText);
@@ -186,9 +186,23 @@
         <h3>{{$eskaintza->izena}}</h3>
 
         @if( $user->id != $eskaintza->userId)
+
         <div id="likeetaerosi">
             <a id="btn_like"><img id="img_like" src="{{$likeimg}}"></a>
-            <button id="btn_erosi">EROSI</button><br>
+            <?php
+            //Eskaintza hau zure ofertetan badago...
+            ?>
+            @if($ofertahartuta == true)
+            <h6 style="color:red;">Saltzaile honekin hitzegiten ari zara</h6><br>
+            <a href="/salerosketak">Salerosketak</a>
+            @else
+            <form action="../makeoffer" method="post">
+                {{ csrf_field() }}
+                <input name="eskaintza" value="{{$eskaintza->id}}" style="display:none;">
+                <button type="submit" id="btn_erosi">Prezio bat eskaini</button>
+            </form><br>
+            @endif
+            
         </div>
 
         @endif

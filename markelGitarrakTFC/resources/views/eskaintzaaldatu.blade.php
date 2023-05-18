@@ -146,7 +146,6 @@
                 $('#input_argazkiak').val(argazkiak.replace(path, ''));
 
                 var realpath = $(this).parent().attr('val');
-                alert(realpath);
 
                 $.ajax({
                     type: 'POST',
@@ -218,7 +217,7 @@
             <input style="display: none;" type="text" name="argazkiak" id="input_argazkiak" value="{{$argazkistring}}">
             <div class="argazkiak">
             @foreach ($argazkiak as $img)
-            <div class='imgbox' id='<?php explode("\.", trim($img))[0]; ?>' val='{{trim($img)}}'><img src="{{ asset('storage/' ) }}/{{trim($img)}}"><div class='btn_deleteimg'>X</div></div>
+            <div class='imgbox' id='{{trim($img)}}' val='{{trim($img)}}'><img src="{{ asset('storage/' ) }}/{{trim($img)}}"><div class='btn_deleteimg'>X</div></div>
             @endforeach
                 <label id="label_gehituargazkia">
                     <input type="file" id="btn_gehituargazkia" value="Argazkia gehitu" accept="image/*">
@@ -302,7 +301,7 @@
         });
 
         $(document).ready(function() {
-            $('.geoapify-autocomplete-input').attr('name', 'kokapena').prop('required',true);
+            $('.geoapify-autocomplete-input').attr('name', 'kokapena').val('{{$eskaintza->kokapena}}');
         });
         
     </script>

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Chat;
+use App\Models\ErabiltzaileChat;
 use App\Models\Eskaintza;
 use App\Models\EskaintzaMota;
 use App\Models\Like;
@@ -24,7 +26,7 @@ class EskaintzaController extends Controller
 
         $user = User::where('email', session('email'))->first();
 
-        $eskaintzak = Eskaintza::where('userId', $user['id'])->get();
+        $eskaintzak = Eskaintza::where([['erosleId','==', Null],['userId', $user['id']]])->get();
 
         return view("zureeskaintzak", compact('eskaintzak'));
     }
@@ -150,7 +152,22 @@ class EskaintzaController extends Controller
 
             $distantzia = $this->helbideenArtekoDistantzia($user->kokapena, $eskaintza->kokapena);
 
-            return view("eskaintza", compact('eskaintza', 'user', 'mota', 'latlon', 'eskaintzajabea', 'distantzia', 'likeimg'));
+            //oferta hartu duen jakiteko
+            $erabiltzailechats = ErabiltzaileChat::where('userId', $user->id)->get();
+            $chatIds = [];
+            foreach ($erabiltzailechats as $key => $value) {
+                array_push($chatIds, $value['chatId']);
+            }
+            $chats = Chat::whereIn('id', $chatIds);
+
+            if($chats->where('eskaintzaId', $eskaintza->id)->count() > 0) {
+                $ofertahartuta=true;
+            }else{
+                $ofertahartuta=false;
+            }
+
+
+            return view("eskaintza", compact('eskaintza', 'user', 'mota', 'latlon', 'eskaintzajabea', 'distantzia', 'likeimg', 'ofertahartuta'));
         } catch (\Exception $e) {
             return redirect("/login");
         }
@@ -331,7 +348,7 @@ class EskaintzaController extends Controller
 
             return view("likes", compact('eskaintzak'));
 
-            
+
         } catch (\Exception $e) {
             return redirect('/login');
         }

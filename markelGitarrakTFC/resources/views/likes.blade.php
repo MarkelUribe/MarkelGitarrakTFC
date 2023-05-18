@@ -83,7 +83,7 @@
 <body class="antialiased">
     @include('navbar')
     <div id="content">
-        <h2>Zure like-ak</h2>
+    <img src="{{ asset('storage/icon/liked.png')}}" style="width:calc(1.4rem + 0.9vw);float:left;"><h2>Zure like-ak</h2>
     <div id="eskaintzak">
         @foreach ($eskaintzak as $esk)
         <a href="eskaintza/{{$esk->id}}" style="color: inherit;text-decoration: none;">

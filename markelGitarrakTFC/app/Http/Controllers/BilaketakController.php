@@ -19,8 +19,12 @@ class BilaketakController extends Controller
     {
        if($request->mota !== null or $request->mota != ""){
         $eskaintzak = Eskaintza::where([['izena','like','%' . $request->bilaketa . '%'],['motaId','=', $request->mota]])->orWhere([['azalpena','like', '%' . $request->bilaketa . '%'],['motaId','=', $request->mota]])->get();
+
+        //Erosiak diren eskaintzak kendu
+        $eskaintzak = $eskaintzak->where('erosleId','==', Null);
        }else{
         $eskaintzak = Eskaintza::where([['izena','like','%' . $request->bilaketa . '%']])->orWhere([['azalpena','like', '%' . $request->bilaketa . '%']])->get();
+        $eskaintzak = $eskaintzak->where('erosleId','==', Null);
        }
 
         $htmlesk = "";

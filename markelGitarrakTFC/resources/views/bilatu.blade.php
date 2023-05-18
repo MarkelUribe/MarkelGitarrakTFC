@@ -15,9 +15,8 @@
     <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
 
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/96/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/loaders/MTLLoader.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/loaders/OBJLoader.js"></script>
+    <!--<script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/loaders/MTLLoader.js"></script>-->
+    <!--<script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/loaders/OBJLoader.js"></script>-->
 </head>
 
 
@@ -119,52 +118,39 @@
         </div>
 
         <div id="eskaintzak"></div>
-        <canvas></canvas>
+        <canvas id="canvas-container"></canvas>
     </div>
 
+    <script src="{{ asset('js/three.js') }}"></script>
     <script>
-        //{{ asset("storage/3d/Guitar.obj" ) }}
-        var camera, scene, renderer, stats, windowHalfX = window.innerWidth / 2,
-        windowHalfY = window.innerHeight / 2,
-        mouseX = 0,
-        mouseY = 0;
+        // Add your Three.js code here
+        // For example, create a scene, camera, and a cube
+        var scene = new THREE.Scene();
+        var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        var renderer = new THREE.WebGLRenderer();
 
-    init();
-    animate();
-
-    function init() {
-        camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 2000);
-        camera.position.set(30, 30, 30)
-        scene = new THREE.Scene();
-
-        scene.add(new THREE.Mesh(
-            new THREE.BoxGeometry(5, 5, 5),
-            new THREE.MeshBasicMaterial({ color: 0x00ff00 })
-        ));
-
-        renderer = new THREE.WebGLRenderer({ antialias: true, canvas: document.querySelector('canvas'), alpha: true });
-        renderer.setPixelRatio(window.devicePixelRatio);
         renderer.setSize(window.innerWidth, window.innerHeight);
-        window.addEventListener('mousemove', onDocumentMouseMove, false);
-    }
+        document.getElementById('canvas-container').appendChild(renderer.domElement);
 
-    function onDocumentMouseMove(event) {
-        mouseX = (event.clientX - windowHalfX) / 10;
-        mouseY = (event.clientY - windowHalfY) / 10;
-    }
+        var geometry = new THREE.BoxGeometry();
+        var material = new THREE.MeshBasicMaterial({
+            color: 0x00ff00
+        });
+        var cube = new THREE.Mesh(geometry, material);
+        scene.add(cube);
 
-    function animate() {
-        requestAnimationFrame(animate);
-        render();
-    }
+        camera.position.z = 5;
 
-    function render() {
-        camera.position.x += (mouseX - camera.position.x) * .05;
-        camera.position.y += (-mouseY - camera.position.y) * .05;
-        camera.lookAt(scene.position);
-        renderer.render(scene, camera);
-    }
+        function animate() {
+            requestAnimationFrame(animate);
+            cube.rotation.x += 0.01;
+            cube.rotation.y += 0.01;
+            renderer.render(scene, camera);
+        }
+
+        animate();
     </script>
+
 </body>
 
 </html>

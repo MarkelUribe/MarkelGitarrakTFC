@@ -6,6 +6,7 @@ use App\Http\Controllers\UserAuth;
 use App\Http\Controllers\Erabiltzailea;
 use App\Http\Controllers\Eskaintza;
 use App\Http\Controllers\EskaintzaController;
+use App\Http\Controllers\SalesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -71,5 +72,11 @@ Route::post('showeskaintzaaldatuimg',[EskaintzaController::class, 'showeskaintza
 
 Route::post('likeorunlike',[EskaintzaController::class, 'likeorunlike']);
 
-
+Route::get('salerosketak', [SalesController::class, 'zuresalerosketak']);
+Route::post('makeoffer',[SalesController::class, 'makeoffer']);
+Route::get('offer/{id}', [SalesController::class, 'offererakutsi']);
+Route::post('mezuakjaso',[SalesController::class, 'mezuakjaso']);
+Route::post('dirueskaintza',[SalesController::class, 'mezuasortu']);
+Route::post('ofertaez',[SalesController::class, 'ofertaez']);
+Route::post('ofertaonartu',[SalesController::class, 'ofertaonartu']);
 

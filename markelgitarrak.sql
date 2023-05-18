@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 12-05-2023 a las 13:35:05
+-- Tiempo de generación: 18-05-2023 a las 20:10:43
 -- Versión del servidor: 10.4.27-MariaDB
 -- Versión de PHP: 8.2.0
 
@@ -29,6 +29,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `chats` (
   `id` int(10) UNSIGNED NOT NULL,
+  `eskaintzaId` int(10) UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -63,6 +64,7 @@ CREATE TABLE `eskaintzak` (
   `estatua` varchar(255) NOT NULL,
   `motaId` int(10) UNSIGNED NOT NULL,
   `userId` int(10) UNSIGNED NOT NULL,
+  `erosleId` int(10) UNSIGNED DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -71,12 +73,12 @@ CREATE TABLE `eskaintzak` (
 -- Volcado de datos para la tabla `eskaintzak`
 --
 
-INSERT INTO `eskaintzak` (`id`, `izena`, `azalpena`, `prezioa`, `argazkiak`, `kokapena`, `estatua`, `motaId`, `userId`, `created_at`, `updated_at`) VALUES
-(7, 'Stratocaster Rockjam beltza', 'RockJam - Zorroarekin. Gitarra oso egoera onean. Oso gutxitan erabiltzen da. Gutxi gorabehera neurriak (98 cm luze, 32 cm zabaleran, 4 cm zabal zabalenean eta 2 cm zabal estuenean). Onartzen dut 2 gitarren ordez bidai gitarra akustiko bat erabiltzea.', 65, ', productimages/vl28EzEvTI1eLkbhdgFhDwqFelUO2GPasCWTgdge.webp, productimages/EvywPOj07BrErllDTO9pgRjvP57fk7aZ1bE7kelu.webp, productimages/YmuXMQ9g1KyfS0TQCAjz6JIpurREimOiCdQ2mqYt.webp, productimages/Sjs12UC1TOuJ7CKLfdcaWF7WNSlOcquD62GUu2zr.webp', 'Tolosa kalea, 1, 20720 Azkoitia, Spain', 'erabilia', 1, 2, '2023-05-08 13:54:50', '2023-05-08 13:54:50'),
-(8, 'Kitarra klasikoa', 'El Corte Inglés - Duquesa (Estudio eredua) C-3901. Gutxi gorabeherako neurriak (37 cm gitarraren zabaleran, 1 m luze gutxi gorabehera, eta ia 10 cm zabal). Gitarra oso egoera onean, oso gutxitan erabilia. Ez du zorrorik.', 65, ', productimages/kNpWRCtvb5hugPWtvyOksBiU2TTXdPOymFyPA0AH.webp, productimages/OnTjSSDxuaWekdwZkwrnSSH8WBIXRGEq9tyUHWlW.webp, productimages/OUFLvy6jIpsxUiZqZ4VHvz9cyGjRtamikdFPbTc4.webp', 'San Andres pasealekua, 1, 20600 Eibar, Spain', 'erabilia', 3, 2, '2023-05-08 14:00:01', '2023-05-08 14:00:01'),
-(9, 'Ibanez Baxua', 'Seymour Duncan SSB4 pilulak - Aldez aurretik Aktibo Seymour Duncan STC-3P - Schaller Zubia 2000 4S - Wilkinson larakoak engranajea bistan dutela. - Kobrean pantailaratutako elektronika guztia Osagaien balioa 450 EURO baino gehiago da.', 500, ', productimages/eEROSMd6nlYELXb2jzSso3H4tAKnvfGjiFcaZzux.webp, productimages/ebsCSSRnLxUixSAFPUx0i2cSVyF8Mvcq2uOjfrkU.webp, productimages/uXFEC5BmWNCga5OvhKYJFuNRvpTQhvxAlU6YHCz4.webp, productimages/QphOhtdQ1gUDabsVgG5ScdNUj7MPbyO7e3enczgB.webp', 'Calle Bizkaia / Bizkaia kalea, 36, 48901 Barakaldo, Spain', 'berria', 2, 2, '2023-05-08 14:05:51', '2023-05-08 14:05:51'),
-(10, 'Kitarra Strandberg Boden Standard NX 6 2022', 'Ongi! Strandberg Boden Standard NX 6 gitarra saltzen dut, berria 2022ko irailean erosia. Denbora honetan etxean bakarrik erabilia.', 1400, ', productimages/xo8d4PV2t7YcgelVCB7MxJgjfRaClAFtSJqWzW3v.webp, productimages/UoSrSi9casPbt1ULmOryzITZqaD2WUM2ZQVU413H.webp, productimages/aCV4DIpSogRiEi7pyaZMsTVISyso0HbNxonmmEhb.webp, productimages/Eh48AAwAsDgMMWr1zBm73bB7Ry2JMna9iP6lYHeL.webp', 'Eliz Kalea, 36, 20730 Azpeitia, Spain', 'ia_berria', 1, 1, '2023-05-08 14:15:19', '2023-05-08 14:15:19'),
-(11, 'Bateria akustikoa', 'Bateria akustiko osoa eta oso egoera onean', 210, ', productimages/3r6T5LIgWfzHvfYe6R0rLlPDIttEcVs1oT8NoDFU.webp, productimages/AXaV3SqfDi3uHzWtW15yNpU1d7T4Ha5y6FWkftbx.webp', 'Portalekoa, San Roke kalea, 6, 20820 Deba, Spain', 'erabilia', 5, 1, '2023-05-08 14:18:26', '2023-05-08 14:18:26');
+INSERT INTO `eskaintzak` (`id`, `izena`, `azalpena`, `prezioa`, `argazkiak`, `kokapena`, `estatua`, `motaId`, `userId`, `erosleId`, `created_at`, `updated_at`) VALUES
+(7, 'Stratocaster Rockjam beltza', 'RockJam - Zorroarekin. Gitarra oso egoera onean. Oso gutxitan erabiltzen da. Gutxi gorabehera neurriak (98 cm luze, 32 cm zabaleran, 4 cm zabal zabalenean eta 2 cm zabal estuenean). Onartzen dut 2 gitarren ordez bidai gitarra akustiko bat erabiltzea.', 62, ', productimages/vl28EzEvTI1eLkbhdgFhDwqFelUO2GPasCWTgdge.webp, productimages/EvywPOj07BrErllDTO9pgRjvP57fk7aZ1bE7kelu.webp, productimages/YmuXMQ9g1KyfS0TQCAjz6JIpurREimOiCdQ2mqYt.webp, productimages/Sjs12UC1TOuJ7CKLfdcaWF7WNSlOcquD62GUu2zr.webp', 'Tolosa kalea, 1, 20720 Azkoitia, Spain', 'erabilia', 1, 2, NULL, '2023-05-08 13:54:50', '2023-05-18 15:17:12'),
+(8, 'Kitarra klasikoa', 'El Corte Inglés - Duquesa (Estudio eredua) C-3901. Gutxi gorabeherako neurriak (37 cm gitarraren zabaleran, 1 m luze gutxi gorabehera, eta ia 10 cm zabal). Gitarra oso egoera onean, oso gutxitan erabilia. Ez du zorrorik.', 80, ', productimages/kNpWRCtvb5hugPWtvyOksBiU2TTXdPOymFyPA0AH.webp, productimages/OnTjSSDxuaWekdwZkwrnSSH8WBIXRGEq9tyUHWlW.webp', 'San Andres pasealekua, 1, 20600 Eibar, Spain', 'erabilia', 3, 2, NULL, '2023-05-08 14:00:01', '2023-05-18 15:39:55'),
+(9, 'Ibanez Baxua', 'Seymour Duncan SSB4 pilulak - Aldez aurretik Aktibo Seymour Duncan STC-3P - Schaller Zubia 2000 4S - Wilkinson larakoak engranajea bistan dutela. - Kobrean pantailaratutako elektronika guztia Osagaien balioa 450 EURO baino gehiago da.', 500, ', productimages/eEROSMd6nlYELXb2jzSso3H4tAKnvfGjiFcaZzux.webp, productimages/ebsCSSRnLxUixSAFPUx0i2cSVyF8Mvcq2uOjfrkU.webp, productimages/uXFEC5BmWNCga5OvhKYJFuNRvpTQhvxAlU6YHCz4.webp, productimages/QphOhtdQ1gUDabsVgG5ScdNUj7MPbyO7e3enczgB.webp', 'Calle Bizkaia / Bizkaia kalea, 36, 48901 Barakaldo, Spain', 'berria', 2, 2, NULL, '2023-05-08 14:05:51', '2023-05-08 14:05:51'),
+(10, 'Kitarra Strandberg Boden Standard NX 6 2022', 'Ongi! Strandberg Boden Standard NX 6 gitarra saltzen dut, berria 2022ko irailean erosia. Denbora honetan etxean bakarrik erabilia.', 1400, ', productimages/xo8d4PV2t7YcgelVCB7MxJgjfRaClAFtSJqWzW3v.webp, productimages/UoSrSi9casPbt1ULmOryzITZqaD2WUM2ZQVU413H.webp, productimages/aCV4DIpSogRiEi7pyaZMsTVISyso0HbNxonmmEhb.webp, productimages/Eh48AAwAsDgMMWr1zBm73bB7Ry2JMna9iP6lYHeL.webp', 'Eliz Kalea, 36, 20730 Azpeitia, Spain', 'ia_berria', 1, 1, NULL, '2023-05-08 14:15:19', '2023-05-08 14:15:19'),
+(11, 'Bateria akustikoa', 'Bateria akustiko osoa eta oso egoera onean  lesgo', 230, ', productimages/3r6T5LIgWfzHvfYe6R0rLlPDIttEcVs1oT8NoDFU.webp, productimages/AXaV3SqfDi3uHzWtW15yNpU1d7T4Ha5y6FWkftbx.webp,', 'Portalekoa, San Roke kalea, 6, 20820 Deba, Spain', 'erabilia', 5, 1, NULL, '2023-05-08 14:18:26', '2023-05-15 13:44:29');
 
 -- --------------------------------------------------------
 
@@ -140,9 +142,9 @@ CREATE TABLE `likes` (
 --
 
 INSERT INTO `likes` (`id`, `userId`, `eskaintzaId`, `created_at`, `updated_at`) VALUES
-(3, 1, 8, '2023-05-12 08:52:09', '2023-05-12 08:52:09'),
-(7, 1, 7, '2023-05-12 10:25:56', '2023-05-12 10:25:56'),
-(8, 2, 10, '2023-05-12 10:33:25', '2023-05-12 10:33:25');
+(8, 2, 10, '2023-05-12 10:33:25', '2023-05-12 10:33:25'),
+(11, 1, 7, '2023-05-16 10:07:28', '2023-05-16 10:07:28'),
+(12, 1, 8, '2023-05-16 19:14:24', '2023-05-16 19:14:24');
 
 -- --------------------------------------------------------
 
@@ -154,7 +156,7 @@ CREATE TABLE `mezuak` (
   `id` int(10) UNSIGNED NOT NULL,
   `textua` varchar(255) NOT NULL,
   `data` timestamp NOT NULL DEFAULT current_timestamp(),
-  `irakurrita` int(11) NOT NULL,
+  `irakurrita` int(11) DEFAULT NULL,
   `userId` int(10) UNSIGNED NOT NULL,
   `chatId` int(10) UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -256,7 +258,8 @@ INSERT INTO `users` (`id`, `name`, `surname`, `email`, `email_verified_at`, `kok
 -- Indices de la tabla `chats`
 --
 ALTER TABLE `chats`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `chat_eskaintza_foreign` (`eskaintzaId`);
 
 --
 -- Indices de la tabla `erabiltzaile_chats`
@@ -272,7 +275,8 @@ ALTER TABLE `erabiltzaile_chats`
 ALTER TABLE `eskaintzak`
   ADD PRIMARY KEY (`id`),
   ADD KEY `eskaintzak_userid_index` (`userId`),
-  ADD KEY `eskaintzak_motaid_index` (`motaId`);
+  ADD KEY `eskaintzak_motaid_index` (`motaId`),
+  ADD KEY `erosleid_userid_foreign` (`erosleId`);
 
 --
 -- Indices de la tabla `eskaintzamotak`
@@ -338,13 +342,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT de la tabla `chats`
 --
 ALTER TABLE `chats`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `erabiltzaile_chats`
 --
 ALTER TABLE `erabiltzaile_chats`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `eskaintzak`
@@ -368,13 +372,13 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT de la tabla `likes`
 --
 ALTER TABLE `likes`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT de la tabla `mezuak`
 --
 ALTER TABLE `mezuak`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `migrations`
@@ -399,6 +403,12 @@ ALTER TABLE `users`
 --
 
 --
+-- Filtros para la tabla `chats`
+--
+ALTER TABLE `chats`
+  ADD CONSTRAINT `chat_eskaintza_foreign` FOREIGN KEY (`eskaintzaId`) REFERENCES `eskaintzak` (`id`);
+
+--
 -- Filtros para la tabla `erabiltzaile_chats`
 --
 ALTER TABLE `erabiltzaile_chats`
@@ -409,6 +419,7 @@ ALTER TABLE `erabiltzaile_chats`
 -- Filtros para la tabla `eskaintzak`
 --
 ALTER TABLE `eskaintzak`
+  ADD CONSTRAINT `erosleid_userid_foreign` FOREIGN KEY (`erosleId`) REFERENCES `users` (`id`),
   ADD CONSTRAINT `eskaintzak_motaid_foreign` FOREIGN KEY (`motaId`) REFERENCES `eskaintzamotak` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `eskaintzak_userid_foreign` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 

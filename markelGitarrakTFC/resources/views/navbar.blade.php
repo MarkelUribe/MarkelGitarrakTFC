@@ -24,6 +24,9 @@
                 <li class="nav-item">
                     <a class="nav-link mx-2 <?php if(basename($_SERVER["PHP_SELF"])=='zureeskaintzak'){ ?> active <?php } ?> " href="{{ url('zureeskaintzak') }}">Zure Eskaintzak</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link mx-2 <?php if(basename($_SERVER["PHP_SELF"])=='salerosketak'){ ?> active <?php } ?> " href="{{ url('salerosketak') }}">Salerosketak</a>
+                </li>
                 @if( session('user') !== null)
                 <li class="nav-item dropdown">
                     <a class="nav-link mx-2 dropdown-toggle <?php if(basename($_SERVER["PHP_SELF"])=='erabiltzailea'){ ?> active <?php } ?>" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
