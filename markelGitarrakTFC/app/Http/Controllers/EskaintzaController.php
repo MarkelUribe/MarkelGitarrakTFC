@@ -346,6 +346,7 @@ class EskaintzaController extends Controller
             }
 
             $eskaintzak = Eskaintza::whereIn('id', $likeids)->get();
+            $eskaintzak = $eskaintzak->where('erosleId','==', Null);
 
             return view("likes", compact('eskaintzak'));
 
