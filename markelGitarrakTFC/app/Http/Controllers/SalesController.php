@@ -86,7 +86,7 @@ class SalesController extends Controller
         $erabiltzaileChat->chatId = $chat->id;
         $erabiltzaileChat->save();
 
-        return redirect("/salerosketak");
+        return redirect("/offer/".$chat->id);
     }
 
     public function offererakutsi(Request $request)
